@@ -5,9 +5,15 @@ import './product_item.dart';
 import 'package:shopp/providers/product_details.dart';
 
 class ProductGridView extends StatelessWidget {
+  final bool isFav;
+  ProductGridView(this.isFav);
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<ProductDetails>(context).listOfProduct;
+    final productData = Provider.of<ProductDetails>(context, listen: false);
+
+    final product =
+        isFav ? productData.favOfproduct : productData.listOfProduct;
+
     return GridView.builder(
       padding: EdgeInsets.all(20),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -16,8 +22,8 @@ class ProductGridView extends StatelessWidget {
           crossAxisSpacing: 10,
           mainAxisSpacing: 10),
       itemBuilder: (context, index) {
-        return ChangeNotifierProvider(
-          create: (c) => product[index],
+        return ChangeNotifierProvider.value(
+          value: product[index], //single product passing to product item
           child: ProductItem(),
         );
       },
